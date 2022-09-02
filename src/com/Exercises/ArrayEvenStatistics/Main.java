@@ -4,26 +4,150 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int input = 1, count = 0;
-        Scanner sc = new Scanner(System.in);
+
+    int input = 1, count = 0;
+    int[] inputArray = new int[0];
+    Scanner sc = new Scanner(System.in);
         System.out.println("Input");
 
-        while(count < 1025){
-            if(input == 0) {
-                System.out.print("re-enter 0 to store as value. \n" +
-                        "any other value ends input: ");
-            }else {
-                System.out.print(": ");
-                input = sc.nextInt();
-                if (input == 0) {
-                    continue;
-                }
-                    System.out.print("Input finished");
-                    break;
-                }
+        while (count < 1025) {
+        System.out.print(": ");
+        input = sc.nextInt();
+        if(input == 0) {
+            System.out.print("re-enter 0 to store as value. \n" +
+                    "any other value ends input: ");
+            input = sc.nextInt();
+            if(input == 0){
+                inputArray = add(input, inputArray);
+                count++;
+                System.out.println("value 0 stored.");
+            }else{
+                System.out.println("Input finished.");
+                ShowStatistic(inputArray);
+                //printArray(inputArray);
+                break;
             }
+        }else{
+            inputArray = add(input, inputArray);
+            count++;
         }
     }
+}
+
+    private static void ShowStatistic(int[] inputArray) {
+        //the count of even numbers in the array
+        printCount(count(inputArray));
+        if(count(inputArray) != 0){
+            //the index position of the even numbers in the array
+            indexPositions(inputArray);
+            //the summ of even numbers in array
+            printSum(sum(inputArray));
+            //the mean sum/count of even numbers in array as double
+            mean(sum(inputArray), count(inputArray));
+            //the max even number and the index position in the array
+            printMax(max(evenNumbers(inputArray)));
+            indexPositionsOfMax(max(evenNumbers(inputArray)), inputArray);
+        }
+    }
+
+    private static void indexPositionsOfMax(int max, int[] arr) {
+        System.out.print(" [");
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] == max){
+                System.out.printf(" %d", i);
+            }
+        }
+        System.out.print("]\n");
+    }
+
+    public static int[] evenNumbers(int[] arr){
+        int j = 0;
+        int[] evenNumbers = new int[0];
+        for(int i =0; i < arr.length; i++){
+            if(arr[i] % 2 == 0){
+                evenNumbers = add(arr[i], evenNumbers);
+                j++;
+            }
+        }
+        return evenNumbers;
+    }
+
+    private static int max(int[] arr) {
+        int max = 0;
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] > max){
+                max = arr[i];
+            }
+        }
+        return max;
+    }
+
+    private static void printMax(int max){
+        System.out.printf("            max: %d", max);
+    }
+
+    private static void mean(int sum, int count) {
+        double mean = (double)sum/(double)count;
+        System.out.printf("           mean: %.2f \n", mean);
+    }
+
+    private static int sum(int[] arr) {
+        int sum = 0;
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] % 2 == 0){
+                sum += arr[i];
+            }
+        }
+
+        return sum;
+    }
+
+    private static void printSum(int sum) {
+        System.out.printf("            sum: %d \n", sum);
+    }
+
+    private static void indexPositions(int[] arr) {
+        System.out.print("index positions: [");
+        for(int i = 0; i < arr.length; i++){
+            if(arr[i] % 2 == 0){
+                System.out.printf(" %d", i);
+            }
+        }
+        System.out.print("]\n");
+    }
+
+    private static int count(int[] arr) {
+        int countEven = 0;
+        for(int i  = 0; i < arr.length; i++){
+            if(arr[i] % 2 == 0){
+                countEven++;
+            }
+        }
+        return countEven;
+    }
+
+    public static void printCount(int count){
+        System.out.printf("          count: %d\n", count);
+    }
+
+    private static int[] add(int input, int[] inputArray) {
+        int[] arr = new int[inputArray.length+1];
+        int i;
+        for(i = 0; i < inputArray.length; i++){
+            arr[i] = inputArray[i];
+        }
+        arr[i] = input;
+        return arr;
+    }
+
+    public static void printArray(int[] arr){
+        System.out.print("[");
+        for(int i = 0; i < arr.length; i++){
+            System.out.printf(" %d", arr[i]);
+        }
+        System.out.print("]");
+    }
+}
 
 /*
 Read at most 1024 integer numbers on the console and store them in an array. Then compute and display a series of statistical quantities.
@@ -109,5 +233,17 @@ Examples
     Input finished.
              count: 0
 
-
+1
+2
+3
+4
+5
+4
+3
+4
+5
+4
+3
+0
+1
  */
