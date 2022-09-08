@@ -14,7 +14,7 @@ public class Main {
         }
         String move = "";
         Position pos = new Position();
-        int i = 65;
+        int i = 65, count = 0;
         String currPos = String.valueOf((char)i);
         map[0][0] = currPos;
         printMap(map);
@@ -24,7 +24,6 @@ public class Main {
             System.out.println();
             //System.out.println("8 = north , 6 = east, 2 = south, 4 = west");
             move = sc.nextLine();
-            addMoves(move, moves);
             switch(move){
                 case "8": //north
                     pos.x--;
@@ -34,8 +33,10 @@ public class Main {
                         break;
                     } else{
                         i++;
+                        count++;
                         if(i > 90){i = 65;}
                         map[pos.x][pos.y] = String.valueOf((char)i);
+                        moves = addMoves(move, moves);
                         printMap(map);
                     }
                     break;
@@ -47,8 +48,10 @@ public class Main {
                         break;
                     } else{
                         i++;
+                        count++;
                         if(i > 90){i = 65;}
                         map[pos.x][pos.y] = String.valueOf((char)i);
+                        moves = addMoves(move, moves);
                         printMap(map);
                     }
                     break;
@@ -60,8 +63,10 @@ public class Main {
                         break;
                     } else{
                         i++;
+                        count++;
                         if(i > 90){i = 65;}
                         map[pos.x][pos.y] = String.valueOf((char)i);
+                        moves = addMoves(move, moves);
                         printMap(map);
                     }
                     break;
@@ -73,25 +78,69 @@ public class Main {
                         break;
                     } else{
                         i++;
+                        count++;
                         if(i > 90){i = 65;}
                         map[pos.x][pos.y] = String.valueOf((char)i);
+                        moves = addMoves(move, moves);
                         printMap(map);
                     }
                     break;
                 case "7": //undo
-
+                    i--;
+                    if(i < 65){
+                        System.out.println("Nothing to undo!");
+                        break;
+                    }
+                    count--;
+                    map = undo(moves, pos, map, i, count);
+                    moves = addMoves(move, moves);
+                    printMap(map);
                     break;
                 case "9": //redo
-
+                    redo(moves);
                     break;
             }
         }
 
     }
 
+    private static void redo(String[] moves) {
+
+    }
+
+    private static String[][] undo(String[] moves, Position pos, String[][] map, int i, int count) {
+        i--;
+        for (int j = count; j != -1; j--) {
+            if (moves[j].equals("8") ) {
+                map[pos.x][pos.y] = ".";
+                    pos.x++;
+                return map;
+            } else if (moves[j].equals("6")) {
+                map[pos.x][pos.y] = ".";
+                   pos.y--;
+                return map;
+            } else if (moves[j].equals("4")) {
+                map[pos.x][pos.y] = ".";
+                    pos.y++;
+                return map;
+            } else if (moves[j].equals("2")) {
+                map[pos.x][pos.y] = ".";
+                    pos.x--;
+                return map;
+            } else {
+                System.out.println("Nothing to undo!");
+            }
+        }
+        return map;
+    }
+
     private static String[] addMoves(String move, String[] moves) {
-        moves = new String[moves.length+1];
-        moves[moves.length] = move;
+        String[] arr = new String[moves.length+1];
+        for(int i = 0 ; i < moves.length; i++){
+            arr[i] = moves[i];
+        }
+        moves = arr;
+        moves[moves.length-1] = move;
         return moves;
     }
 
